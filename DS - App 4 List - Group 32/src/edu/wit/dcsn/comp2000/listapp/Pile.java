@@ -2,6 +2,10 @@ package edu.wit.dcsn.comp2000.listapp;
 
 import java.util.List;
 
+/**
+ * Noah D'Alelio
+ */
+
 public abstract class Pile {
 	private List<Card> cards;
 	

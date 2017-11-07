@@ -1,5 +1,10 @@
 package edu.wit.dcsn.comp2000.listapp;
 
+/**
+ * Noah D'Alelio
+ */
+
+
 public class Hand extends Pile {
 
 	public Hand() {
