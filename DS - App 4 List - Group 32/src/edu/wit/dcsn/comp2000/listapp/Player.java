@@ -12,10 +12,14 @@ public class Player {
 	
 	public Player(int id, String name) {
 		this.ID = id;
+		this.name = name;
+		
+		this.hand = new Hand();
 	}
 	
 	public boolean hit(Deck deck) {
-		return false;
+		hand.hit(deck);
+		return !hand.isBusted();
 	}
 	
 	public String getName() {
@@ -31,6 +35,6 @@ public class Player {
 	}
 	
 	public String toString() {
-		return null;
+		return getName() + " - " + hand + " - " + hand.sum();
 	}
 }

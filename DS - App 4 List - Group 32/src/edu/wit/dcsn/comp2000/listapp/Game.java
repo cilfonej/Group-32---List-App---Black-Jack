@@ -51,6 +51,8 @@ public class Game {
 			player.getHand().clear();
 		}
 		
+		dealer.getDeck().reset();
+		
 		// Add 2 cards to All players hands, Makes sure no player gets two cards in a row, Standard Poker Deal
 		for(int i = players.size() - 1; i >= 0; i --) players.get(i).getHand().hit(dealer.getDeck());
 		for(int i = players.size() - 1; i >= 0; i --) players.get(i).getHand().hit(dealer.getDeck()); 
@@ -59,6 +61,11 @@ public class Game {
 	private Player[] playRound() {
 		for(int i = players.size() - 1; i >= 0; i --) {
 			Player player = players.get(i);
+			
+			if(player instanceof Dealer) {
+				player.hit(dealer.getDeck());
+				continue;
+			}
 			
 			System.out.println("\n" + player);
 			while(yesNoPrompt("Take another card?") && player.hit(dealer.getDeck()))
@@ -77,7 +84,7 @@ public class Game {
 					winners.add(player);
 					bestScore = playerScore;
 					
-				} else {
+				} else if(playerScore == bestScore) {
 					winners.add(player);
 				}
 			}
@@ -106,7 +113,7 @@ public class Game {
 		game.createPlayer();
 		
 		do {
-//			game.prepNewRound();
+			game.prepNewRound();
 			Player[] winners = game.playRound();
 			
 			System.out.println("\nThe Final scores are:");
