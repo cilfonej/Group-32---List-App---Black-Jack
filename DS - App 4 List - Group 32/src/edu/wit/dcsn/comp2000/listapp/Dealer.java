@@ -17,6 +17,8 @@ public class Dealer extends Player {
 	}
 	
 	public boolean hit(Deck deck) {
-		return false; // TODO: Implement Dealer Specific Rules
+		while(getHand().sum() <= 16)
+			super.hit(deck);
+		return false;
 	}
 }
