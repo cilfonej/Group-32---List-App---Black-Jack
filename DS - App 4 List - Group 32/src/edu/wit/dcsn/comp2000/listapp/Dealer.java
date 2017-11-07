@@ -1,5 +1,10 @@
 package edu.wit.dcsn.comp2000.listapp;
 
+/**
+ * 
+ *  @author Joshua Cilfone
+ *
+ */
 public class Dealer extends Player {
 	private Deck deck;
 	

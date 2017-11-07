@@ -2,6 +2,11 @@ package edu.wit.dcsn.comp2000.listapp;
 
 import java.util.List;
 
+/**
+ * 
+ * @author Joshua Cilfone
+ *
+ */
 public class Game {
 	private List<Player> player;
 	
