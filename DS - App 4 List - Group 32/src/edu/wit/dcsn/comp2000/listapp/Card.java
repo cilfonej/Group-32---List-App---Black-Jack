@@ -1,5 +1,9 @@
 package edu.wit.dcsn.comp2000.listapp;
-
+/**
+ * 
+ * @author PapaPajama
+ *
+ */
 public class Card {
 	public static enum Type {
 		Heart, Diamond, Spade, Club;

@@ -1,5 +1,9 @@
 package edu.wit.dcsn.comp2000.listapp;
-
+/** 
+ * 
+ * @author PapaPajama
+ *
+ */
 public class Player {
 	private Hand hand;
 	private String name;
