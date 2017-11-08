@@ -5,9 +5,6 @@ import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
-import edu.wit.dcsn.comp2000.listapp.Card.Type;
-import edu.wit.dcsn.comp2000.listapp.Card.Value;
-
 /**
  *  This class is responsible for taking in Input from the users,
  *  and controlling the flow of the game.
