@@ -6,7 +6,7 @@ package edu.wit.dcsn.comp2000.listapp;
  */
 public class Card {
 	public static enum Type {
-		Heart, Diamond, Spade, Club;
+		Hearts, Diamonds, Spades, Clubs;
 	}
 	
 	public static enum Value {
@@ -48,7 +48,7 @@ public class Card {
 	}
 	
 	public String toString() { 
-		
-		return null;
+		return "This is the " + value + " of " + type;
+		//displays the the Type and value of card
 	}
 }
