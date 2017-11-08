@@ -35,6 +35,6 @@ public class Player {
 	}
 	
 	public String toString() {
-		return getName() + " - " + hand + " - " + hand.sum();
+		return getName() + " - " + hand.sum() + " - " + hand;
 	}
 }

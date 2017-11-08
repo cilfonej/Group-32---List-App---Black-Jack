@@ -19,6 +19,11 @@ public class Card {
 		}
 		
 		public int getValue() { return value; }
+		
+		public String toString() {
+			String s = super.toString();
+			return s.startsWith("_") ? s.substring(1) : s;
+		}
 	}
 	
 	private Type type;

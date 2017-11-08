@@ -9,9 +9,7 @@ import edu.wit.dcsn.comp2000.listapp.Card.Value;
 
 public class Deck extends Pile {
 	
-	public Deck() { 
-		reset();
-	}
+	public Deck() { }
 	
 	public void shuffle() {
 		for(int i = 0; i < getSize(); i ++) {
