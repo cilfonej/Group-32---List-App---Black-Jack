@@ -4,7 +4,7 @@ package edu.wit.dcsn.comp2000.listapp;
  * @author PapaPajama
  *
  */
-public class Player {
+public class Player extends Deck{
 	private Hand hand;
 	private String name;
 	
@@ -15,6 +15,7 @@ public class Player {
 	}
 	
 	public boolean hit(Deck deck) {
+		draw();
 		return false;
 	}
 	
