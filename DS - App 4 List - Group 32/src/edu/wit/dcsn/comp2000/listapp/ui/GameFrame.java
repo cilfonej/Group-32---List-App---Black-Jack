@@ -44,8 +44,6 @@ public class GameFrame extends JFrame implements ActionListener, ListSelectionLi
 		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 		LENGTH_SCALE = (double) gd.getDisplayMode().getWidth() / 1366.0;
 		HEIGHT_SCALE = (double) gd.getDisplayMode().getHeight() / 768.0;
-		
-		System.out.println(LENGTH_SCALE);
 	}
 	
 	private static Font calc(Font normal) {
@@ -182,11 +180,13 @@ public class GameFrame extends JFrame implements ActionListener, ListSelectionLi
 		if(e.getSource() == addButton) {
 			playerListModel.addRow(new Object[] { "Player #" + (++ playerIndex) });
 			removeButton.setEnabled(list.getSelectedRow() != -1 && list.getRowCount() > 1);
+			addButton.setEnabled(list.getRowCount() < 5);
 			return;
 		}
 		
 		if(e.getSource() == removeButton) {
 			playerListModel.removeRow(list.getSelectedRow());
+			addButton.setEnabled(list.getRowCount() < 5);
 			return;
 		}
 		

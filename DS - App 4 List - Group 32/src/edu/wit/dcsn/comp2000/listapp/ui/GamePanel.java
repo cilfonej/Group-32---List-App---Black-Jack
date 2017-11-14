@@ -141,11 +141,14 @@ public class GamePanel extends JPanel {
 			
 			g2d.setColor(c.getBackground());
 			g2d.fillRect(0, 0, width, height);
+
+			int floorWidth = (int) (FLOOR.getWidth(null) * GameFrame.LENGTH_SCALE);
+			int floorHeight = (int) (FLOOR.getHeight(null) * GameFrame.HEIGHT_SCALE);
 			
 			g2d.translate(0, height / 2);
-			for(int i = 0; i < Math.ceil((float) width / FLOOR.getWidth(null)); i ++)   {
-			for(int j = 0; j < Math.ceil((float) height / 2 / FLOOR.getHeight(null)); j ++) {
-				g2d.drawImage(FLOOR, FLOOR.getWidth(null) * i, FLOOR.getHeight(null) * j, null);
+			for(int i = 0; i < Math.ceil((float) width / floorWidth); i ++)   {
+			for(int j = 0; j < Math.ceil((float) height / 2 / floorHeight); j ++) {
+				g2d.drawImage(FLOOR, floorWidth * i, floorHeight * j, floorWidth, floorHeight, null);
 			}}
 			g2d.translate(0, -height / 2);
 			
@@ -157,9 +160,12 @@ public class GamePanel extends JPanel {
 			Area mask = new Area(maskTop); mask.add(new Area(maskBase));
 			g2d.setClip(mask);
 			
-			for(int i = 0; i < Math.ceil((float) width / BACKDROP.getWidth(null)); i ++)   {
-			for(int j = 0; j < Math.ceil((float) height / BACKDROP.getHeight(null)); j ++) {
-				g2d.drawImage(BACKDROP, BACKDROP.getWidth(null) * i, BACKDROP.getHeight(null) * j, null);
+			int backWidth = (int) (BACKDROP.getWidth(null) / 2f * GameFrame.LENGTH_SCALE);
+			int backHeight = (int) (BACKDROP.getHeight(null) / 2f * GameFrame.HEIGHT_SCALE);
+			
+			for(int i = 0; i < Math.ceil((float) width / backWidth); i ++)   {
+			for(int j = 0; j < Math.ceil((float) height / backHeight); j ++) {
+				g2d.drawImage(BACKDROP, backWidth * i, backHeight * j, backWidth, backHeight, null);
 			}}
 			
 			g2d.setColor(Color.DARK_GRAY.darker());
