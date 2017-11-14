@@ -26,7 +26,7 @@ public class Hand extends Pile {
 			sum += card.getValue().getValue();
 			
 			if(sum > 21 && aceCount > 0) {
-				sum -= 10 * aceCount --;
+				sum -= 10; aceCount --;
 			}
 		}
 		

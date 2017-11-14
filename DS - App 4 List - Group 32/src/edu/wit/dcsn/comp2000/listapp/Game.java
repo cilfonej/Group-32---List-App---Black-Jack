@@ -36,7 +36,7 @@ public class Game {
 		
 		do {
 			System.out.print("How many people will be playing? ");
-			try { playerCount = scan.nextInt(); }
+			try { playerCount = scan.nextInt(); if(playerCount > 5) throw new InputMismatchException(); }
 			catch(InputMismatchException e) { playerCount = -1; scan.nextLine(); }
 			
 			if(playerCount < 0) { System.err.println("Invalid Number of Players!"); System.err.flush(); }

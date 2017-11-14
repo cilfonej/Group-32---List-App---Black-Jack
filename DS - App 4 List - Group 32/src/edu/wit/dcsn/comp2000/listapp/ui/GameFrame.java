@@ -4,20 +4,27 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 
+import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
@@ -27,6 +34,47 @@ import edu.wit.dcsn.comp2000.listapp.Card.Value;
 
 public class GameFrame extends JFrame implements ActionListener, ListSelectionListener {
 	private static final long serialVersionUID = -8519016569888612830L;
+	
+	public static final double LENGTH_SCALE;
+	public static final double HEIGHT_SCALE;
+	
+	private static final Graphics CALC_GRAPHICS_CONTEXT = new BufferedImage(10, 10, BufferedImage.TYPE_INT_ARGB).createGraphics();
+	
+	static {
+		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+		LENGTH_SCALE = (double) gd.getDisplayMode().getWidth() / 1366.0;
+		HEIGHT_SCALE = (double) gd.getDisplayMode().getHeight() / 768.0;
+		
+		System.out.println(LENGTH_SCALE);
+	}
+	
+	private static Font calc(Font normal) {
+		FontMetrics metrics = CALC_GRAPHICS_CONTEXT.getFontMetrics(normal);
+		double targetHeight = metrics.getHeight() * HEIGHT_SCALE;
+		
+		int high = 1000, low = 0;
+		int fontSize = 0;
+		
+		while(low < high) {
+			fontSize = (high + low) / 2;
+			Font testFont = new Font(normal.getFamily(), normal.getStyle(), fontSize);
+			FontMetrics testMetrics = CALC_GRAPHICS_CONTEXT.getFontMetrics(testFont);
+			
+			if(testMetrics.getHeight() > targetHeight) {
+				high = fontSize - 1;
+			} else if(testMetrics.getHeight() < targetHeight) {
+				low = fontSize + 1;
+			} else {
+				return testFont;
+			}
+		}
+		
+		Font testFont = new Font(normal.getFamily(), normal.getStyle(), fontSize);
+		FontMetrics testMetrics = CALC_GRAPHICS_CONTEXT.getFontMetrics(testFont);
+		if(testMetrics.getHeight() > targetHeight) fontSize --;
+		
+		return new Font(normal.getFamily(), normal.getStyle(), fontSize);
+	}
 	
 	private JButton addButton;
 	private JButton removeButton;
@@ -44,10 +92,12 @@ public class GameFrame extends JFrame implements ActionListener, ListSelectionLi
 		} catch(ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
 			e.printStackTrace();
 		}
+
+		Font FONT = calc(new Font("Tahoma", Font.PLAIN, 14));
 		
 		setTitle("Back Jack - Group 32");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setSize(500, 300);
+		setSize((int) (500 * LENGTH_SCALE), (int) (300 * HEIGHT_SCALE));
 		getContentPane().setLayout(layout = new CardLayout(0, 0));
 		
 		JPanel panel = new JPanel();
@@ -63,8 +113,13 @@ public class GameFrame extends JFrame implements ActionListener, ListSelectionLi
 		
 		list = new JTable(playerListModel = new DefaultTableModel(new Object[][] {}, new String[] { "Players" }));
 		list.setShowHorizontalLines(false);
-		list.setRowHeight(24);
-		list.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		list.setRowHeight((int) (24 * HEIGHT_SCALE));
+		list.setFont(FONT);
+		JTextField textField = new JTextField();
+		textField.setFont(FONT);
+		textField.setBorder(new LineBorder(Color.BLACK));
+		DefaultCellEditor dce = new DefaultCellEditor( textField );
+		list.getColumnModel().getColumn(0).setCellEditor(dce);
 		list.setFillsViewportHeight(true);
 		list.setShowVerticalLines(false);
 		list.setShowGrid(false);
@@ -81,14 +136,17 @@ public class GameFrame extends JFrame implements ActionListener, ListSelectionLi
 		buttonPanel.setLayout(new BorderLayout(0, 1));
 		
 		addButton = new JButton("Add Player");
+		addButton.setFont(FONT);
 		addButton.setFocusable(false);
 		buttonPanel.add(addButton, BorderLayout.NORTH);
 		
 		removeButton = new JButton("Remove Player");
+		removeButton.setFont(FONT);
 		removeButton.setFocusable(false);
 		buttonPanel.add(removeButton, BorderLayout.SOUTH);
 		
 		startButton = new JButton("Start Game");
+		startButton.setFont(FONT);
 		startButton.setFocusable(false);
 		laftPanel.add(startButton, BorderLayout.SOUTH);
 		

@@ -48,6 +48,10 @@ public class GamePanel extends JPanel {
 		private static final Image BACKDROP = new ImageIcon(GamePanel.class.getResource("Backdrop.png")).getImage();
 		private static final Image FLOOR = new ImageIcon(GamePanel.class.getResource("tableTop.png")).getImage();
 
+		private static final Image PASS_IMAGE = new ImageIcon(GamePanel.class.getResource("passImage.png")).getImage();
+		private static final Image HIT_IMAGE = new ImageIcon(GamePanel.class.getResource("hitImage.png")).getImage();
+		private static final Image NEXT_IMAGE = new ImageIcon(GamePanel.class.getResource("nextRound.png")).getImage();
+		
 		private static final Image CARD_BACK = new ImageIcon(GamePanel.class.getResource("cardBack.png")).getImage();
 		
 		private static final Image[] CARDS = new Image[52]; static {
@@ -59,9 +63,9 @@ public class GamePanel extends JPanel {
 				}}
 			} catch(IOException e) { }
 		}
-		
-		private static final float CARD_DISPLAY_WIDTH = 67;
-		private static final float CARD_DISPLAY_HEIGHT = 100;
+
+		private static final float CARD_DISPLAY_HEIGHT = (float) (125 * GameFrame.LENGTH_SCALE);
+		private static final float CARD_DISPLAY_WIDTH = CARD_DISPLAY_HEIGHT / 1.5f;
 		
 		private static final Rectangle2D CARD_BOUNDS = new Rectangle2D.Float(0, 0, CARD_DISPLAY_WIDTH, CARD_DISPLAY_HEIGHT);
 		
@@ -71,6 +75,7 @@ public class GamePanel extends JPanel {
 		private boolean isCtrlDown;
 		private Point mouseLoc;
 		private Card drawCard;
+		private Player drawCardOwner;
 		
 		private Point clickPoint;
 
@@ -163,16 +168,24 @@ public class GamePanel extends JPanel {
 			
 			g2d.setClip(null);
 			drawCard = null;
+			drawCardOwner = null;
 			
-			for(Player player : players)
+			Card drawCardStart = drawCard;
+			for(Player player : players) {
 				drawPlayer(g2d, player, c);
+				
+				if(drawCardStart != drawCard) {
+					drawCardOwner = player;
+					drawCardStart = drawCard;
+				}
+			}
 			
 			drawDealer(g2d, c);
 			drawButtons(g2d, c);
 			
 			if(drawCard != null) {
 				boolean faceUp = drawCard.isFaceUp();
-				if(isCtrlDown && !faceUp) drawCard.flip();
+				if(isCtrlDown && !faceUp && drawCardOwner == component.game.getCurrentPlayer()) drawCard.flip();
 				
 				g2d.drawImage(getCard(drawCard), mouseLoc.x, (int) (mouseLoc.y - CARD_DISPLAY_HEIGHT), 
 						(int) (CARD_DISPLAY_WIDTH * 2), (int) (CARD_DISPLAY_HEIGHT * 2), null);
@@ -207,19 +220,9 @@ public class GamePanel extends JPanel {
 		private void drawWinners(Graphics2D g2d) {
 			if(winners == null) return;
 			
-			g2d.setFont(new Font("", Font.BOLD, (int) (CARD_DISPLAY_HEIGHT * 3 / 8)));
-			Rectangle2D nameBounds = g2d.getFont().getStringBounds("Next Round", g2d.getFontRenderContext());
-			
-			g2d.scale(1.25, 1.25);
-			
-			g2d.setColor(new Color(225, 200, 72));
-			g2d.fill(nameBounds);
-			g2d.setColor(Color.BLACK);
-			g2d.draw(nameBounds);
-
-			Rectangle2D largerBounds = g2d.getTransform().createTransformedShape(nameBounds).getBounds2D();
-			
-			g2d.scale(1 / 1.25, 1 / 1.25);
+			g2d.drawImage(NEXT_IMAGE, 0, (int) -CARD_BOUNDS.getWidth() / 4, (int) CARD_BOUNDS.getHeight() * 5/4, (int) CARD_BOUNDS.getWidth() * 5/4, null);
+			Shape largerBounds = new Rectangle2D.Float(0, (int) -CARD_BOUNDS.getWidth() / 4, (int) CARD_BOUNDS.getHeight() * 5/4, (int) CARD_BOUNDS.getWidth() * 5/4);
+			largerBounds = g2d.getTransform().createTransformedShape(largerBounds);
 			
 			if(clickPoint != null && largerBounds.contains(clickPoint)) {
 				winners = null;
@@ -232,24 +235,16 @@ public class GamePanel extends JPanel {
 				}
 			}
 			
-			float hx = (int) ((CARD_DISPLAY_WIDTH - largerBounds.getWidth()) / 4); 
-			float hy = (int) ((CARD_DISPLAY_HEIGHT - largerBounds.getHeight()) / 6 - largerBounds.getY());
 			
-			g2d.translate(-hx / 2, hy);
-
-			g2d.setColor(new Color(225, 200, 72).darker().darker().darker());
-			g2d.drawString("Next Round", 0, 0);
-
+			g2d.setFont(new Font("", Font.BOLD, (int) (CARD_DISPLAY_HEIGHT * 3 / 8)));
 			g2d.setColor(new Color(225, 200, 72));
-			
-			g2d.translate(0, nameBounds.getHeight() / 2);
+			g2d.translate(0, largerBounds.getBounds().getHeight());
 			
 			for(Player player : winners) {
-				g2d.translate(0, nameBounds.getHeight());
+				g2d.translate(0, (CARD_DISPLAY_HEIGHT * 3 / 8));
 				g2d.drawString(player.getName(), 0, 0);
 			}
 
-			g2d.translate(hx / 2, -hy);
 		}
 		
 		private void drawPass(Graphics2D g2d) {
@@ -265,28 +260,8 @@ public class GamePanel extends JPanel {
 				}
 			}
 			
-			g2d.setColor(new Color(72, 126, 72));
-			g2d.fill(CARD_BOUNDS);
-			g2d.setColor(Color.BLACK);
-			g2d.draw(CARD_BOUNDS);
+			g2d.drawImage(PASS_IMAGE, 0, 0, (int) CARD_BOUNDS.getWidth(), (int) CARD_BOUNDS.getHeight(), null);
 			
-			g2d.setFont(new Font("", Font.BOLD, (int) (CARD_DISPLAY_HEIGHT * 3 / 8)));
-			Rectangle2D nameBounds = g2d.getFont().getStringBounds("PASS", g2d.getFontRenderContext());
-			Shape glyph = g2d.getFont().createGlyphVector(g2d.getFontRenderContext(), "PASS").getOutline();
-			
-			float hx = (int) ((CARD_DISPLAY_WIDTH - nameBounds.getWidth()) / 2); 
-			float hy = (int) ((CARD_DISPLAY_HEIGHT - nameBounds.getHeight()) / 2 - nameBounds.getY());
-			
-			g2d.translate(hx, hy);
-
-			g2d.setColor(Color.WHITE);
-			g2d.fill(glyph);
-
-			g2d.setStroke(new BasicStroke(2));
-			g2d.setColor(Color.BLACK);
-			g2d.draw(glyph);
-
-			g2d.translate(-hx, -hy);
 		}
 		
 		private void drawHit(Graphics2D g2d) {
@@ -302,25 +277,7 @@ public class GamePanel extends JPanel {
 				}
 			}
 			
-			g2d.drawImage(CARD_BACK, 0, 0, (int) CARD_DISPLAY_WIDTH, (int) CARD_DISPLAY_HEIGHT, null);
-			
-			g2d.setFont(new Font("", Font.BOLD, (int) (CARD_DISPLAY_HEIGHT * 3 / 8)));
-			Rectangle2D nameBounds = g2d.getFont().getStringBounds("HIT", g2d.getFontRenderContext());
-			Shape glyph = g2d.getFont().createGlyphVector(g2d.getFontRenderContext(), "HIT").getOutline();
-			
-			float hx = (int) ((CARD_DISPLAY_WIDTH - nameBounds.getWidth()) / 2); 
-			float hy = (int) ((CARD_DISPLAY_HEIGHT - nameBounds.getHeight()) / 2 - nameBounds.getY());
-			
-			g2d.translate(hx, hy);
-
-			g2d.setColor(Color.WHITE);
-			g2d.fill(glyph);
-
-			g2d.setStroke(new BasicStroke(2));
-			g2d.setColor(Color.BLACK);
-			g2d.draw(glyph);
-
-			g2d.translate(-hx, -hy);
+			g2d.drawImage(HIT_IMAGE, 0, 0, (int) CARD_BOUNDS.getWidth(), (int) CARD_BOUNDS.getHeight(), null);
 		}
 		
 		private void drawDealer(Graphics2D g2d, JComponent c) {
@@ -400,7 +357,7 @@ public class GamePanel extends JPanel {
 			
 			if(dx*dx < dy*dy) {
 				if(dy > 0) {
-					shiftX = cardsWidth;
+					shiftX = cardsWidth / 2;
 				} else {
 					shiftX = 0;
 				}
@@ -446,7 +403,8 @@ public class GamePanel extends JPanel {
 			Image image = card.isFaceUp() ? CARDS[card.getType().ordinal() * 13 + card.getValue().ordinal()] : CARD_BACK;
 			g2d.drawImage(image, 0, 0, (int) CARD_DISPLAY_WIDTH, (int) CARD_DISPLAY_HEIGHT, null);
 
-			if(mouseLoc != null && g2d.getTransform().createTransformedShape(CARD_BOUNDS).contains(mouseLoc)) drawCard = card;
+			if(mouseLoc != null && g2d.getTransform().createTransformedShape(CARD_BOUNDS).contains(mouseLoc)) 
+				drawCard = card;
 		}
 
 		public void mouseMoved(MouseEvent e)    { mouseLoc = e.getPoint(); 	component.repaint(); }
