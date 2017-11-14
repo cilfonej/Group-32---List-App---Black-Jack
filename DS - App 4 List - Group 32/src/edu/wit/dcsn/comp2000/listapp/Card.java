@@ -39,7 +39,7 @@ public class Card {
 	}
 	
 	public void flip() {
-		isFaceUp = true;
+		isFaceUp = !isFaceUp;
 		// TODO: Implement 
 	}
 	

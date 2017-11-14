@@ -12,11 +12,15 @@ public class Player extends Deck{
 	
 	public Player(int id, String name) {
 		this.ID = id;
+		this.name = name;
 	}
 	
 	public boolean hit(Deck deck) {
-		draw();
-		return false;
+		hand.hit(deck);
+		if (hand.sum()>21)
+			return false;
+		else
+			return true;
 	}
 	
 	public String getName() {
@@ -32,6 +36,6 @@ public class Player extends Deck{
 	}
 	
 	public String toString() {
-		return null;
+		return "The Player " + name + "has a hand of " + hand + "totalling " + hand.sum();
 	}
 }
