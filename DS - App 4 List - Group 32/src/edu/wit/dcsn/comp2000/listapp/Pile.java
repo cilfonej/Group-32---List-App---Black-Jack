@@ -1,31 +1,35 @@
 package edu.wit.dcsn.comp2000.listapp;
 
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Noah D'Alelio
  */
 
 public abstract class Pile {
-	private List<Card> cards;
+	private ArrayList<Card> cards;
 	
 	public Pile() {
-		// init List
+		cards = new ArrayList<Card>();
 	}
 	
 	public int getSize() {
-		return 0;
+		return cards.size();
+	}
+	
+	public void add(Card card) {
+		cards.add(card);
 	}
 	
 	public Card get(int index) {
-		return null;
+		return cards.get(index);
 	}
 	
 	public Card remove(int index) {
-		return null;
+		return cards.remove(index);
 	}
 	
 	public void clear() {
-		
+		cards.clear();
 	}
 }
