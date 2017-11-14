@@ -13,6 +13,7 @@ public class Player extends Deck{
 	public Player(int id, String name) {
 		this.ID = id;
 		this.name = name;
+		hand = new Hand();
 	}
 	
 	public boolean hit(Deck deck) {
@@ -36,6 +37,6 @@ public class Player extends Deck{
 	}
 	
 	public String toString() {
-		return "The Player " + name + "has a hand of " + hand + "totalling " + hand.sum();
+		return "The Player " + name + " has a hand of " + hand + " totalling " + hand.sum();
 	}
 }

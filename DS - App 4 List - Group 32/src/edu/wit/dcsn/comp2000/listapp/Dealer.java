@@ -63,11 +63,11 @@ public class Dealer extends Player {
 		System.out.println("Deck Created: " + (dealer.getDeck() != null ? "PASSED" : "FAILED"));
 		
 		Deck deck = new Deck();
-		deck.add(new Card(Type.Club, Value._10));
-		deck.add(new Card(Type.Spade, Value._10));
-		deck.add(new Card(Type.Heart, Value._10));
-		deck.add(new Card(Type.Diamond, Value._6));
-		deck.add(new Card(Type.Diamond, Value._10));
+		deck.add(new Card(Type.Clubs, Value._10));
+		deck.add(new Card(Type.Spades, Value._10));
+		deck.add(new Card(Type.Hearts, Value._10));
+		deck.add(new Card(Type.Diamonds, Value._6));
+		deck.add(new Card(Type.Diamonds, Value._10));
 		
 		// Prep Hand -- Nothing Tested here, should be tested by Hand / Player
 		dealer.getHand().hit(deck);

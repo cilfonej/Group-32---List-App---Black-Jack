@@ -24,7 +24,7 @@ public class Deck extends Pile {
 	}
 	
 	public Card draw() {
-		return get(getSize());
+		return remove(getSize()-1);
 	}
 	
 	public void reset() {
