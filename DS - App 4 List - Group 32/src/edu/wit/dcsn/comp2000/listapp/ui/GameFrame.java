@@ -150,7 +150,7 @@ public class GameFrame extends JFrame implements ActionListener, ListSelectionLi
 		
 		JPanel label = new JPanel() {
 			private static final long serialVersionUID = 1L;
-			private Card card = new Card(edu.wit.dcsn.comp2000.listapp.Card.Type.Spades, Value.Jack);
+			private Card card = new Card(edu.wit.dcsn.comp2000.listapp.Card.Type.Spades, Value.Jack); { card.flip(); } 
 			protected void paintComponent(Graphics g) {
 				g.drawImage(GamePanel.getCard(card), 5, (getHeight() - (int)((getWidth() - 10) * 1.5)) / 2, getWidth() - 10, (int)((getWidth() - 10) * 1.5), null);
 			}
